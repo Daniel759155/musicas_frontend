@@ -1,14 +1,22 @@
 /* ===== Cores e base ===== */
 :root {
-    --fundo: #0b0b14;
-    --vidro: rgba(255, 255, 255, 0.06);
-    --borda: rgba(255, 255, 255, 0.12);
-    --texto: #f2f2f7;
-    --texto-suave: #a1a1b5;
+    --fundo: #07070f;
+    --card: #13111f;
+    --borda: rgba(255, 255, 255, 0.1);
+    --texto: #f4f4fa;
+    --texto-suave: #a5a5bd;
     --roxo: #8b5cf6;
     --rosa: #ec4899;
+    --ciano: #22d3ee;
     --vermelho: #f43f5e;
     --gradiente: linear-gradient(135deg, var(--roxo), var(--rosa));
+}
+
+/* Ângulo animável para a borda brilhante dos cards */
+@property --angulo {
+    syntax: "<angle>";
+    initial-value: 0deg;
+    inherits: false;
 }
 
 * {
@@ -19,45 +27,135 @@
 
 body {
     font-family: "Poppins", Arial, sans-serif;
-    background-color: var(--fundo);
+    background: var(--fundo);
     color: var(--texto);
     min-height: 100vh;
     overflow-x: hidden;
 }
 
-/* Bolhas de luz animadas no fundo */
-body::before,
-body::after {
-    content: "";
+/* ===================================================== */
+/* ================== FUNDO ANIMADO ==================== */
+/* ===================================================== */
+.fundo {
     position: fixed;
-    width: 500px;
-    height: 500px;
-    border-radius: 50%;
-    filter: blur(120px);
-    opacity: 0.35;
+    inset: 0;
     z-index: -1;
-    animation: flutuar 14s ease-in-out infinite alternate;
+    overflow: hidden;
+    pointer-events: none;
+    /* gradiente que se move devagar */
+    background: linear-gradient(120deg, #0b0718, #160a26, #070d1f, #1a0a1d, #0b0718);
+    background-size: 400% 400%;
+    animation: gradienteMovendo 20s ease infinite;
 }
 
-body::before {
+/* grade sutil por cima */
+.fundo::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image:
+        linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+    background-size: 60px 60px;
+    mask-image: radial-gradient(ellipse at center, black 30%, transparent 75%);
+    -webkit-mask-image: radial-gradient(ellipse at center, black 30%, transparent 75%);
+    animation: gradeAndando 12s linear infinite;
+}
+
+@keyframes gradienteMovendo {
+    0%   { background-position: 0% 50%; }
+    50%  { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+@keyframes gradeAndando {
+    from { background-position: 0 0; }
+    to   { background-position: 60px 60px; }
+}
+
+/* Luzes coloridas passeando */
+.luz {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(110px);
+    opacity: 0.45;
+}
+
+.luz1 {
+    width: 520px;
+    height: 520px;
     background: var(--roxo);
-    top: -150px;
-    left: -150px;
+    top: -120px;
+    left: -120px;
+    animation: passear1 18s ease-in-out infinite alternate;
 }
 
-body::after {
+.luz2 {
+    width: 460px;
+    height: 460px;
     background: var(--rosa);
-    bottom: -150px;
-    right: -150px;
-    animation-delay: -7s;
+    bottom: -140px;
+    right: -100px;
+    animation: passear2 22s ease-in-out infinite alternate;
 }
 
-@keyframes flutuar {
-    from { transform: translate(0, 0) scale(1); }
-    to   { transform: translate(120px, 80px) scale(1.2); }
+.luz3 {
+    width: 340px;
+    height: 340px;
+    background: var(--ciano);
+    top: 40%;
+    left: 45%;
+    opacity: 0.22;
+    animation: passear3 26s ease-in-out infinite alternate;
 }
 
-/* ===== Cabeçalho ===== */
+@keyframes passear1 {
+    0%   { transform: translate(0, 0) scale(1); }
+    50%  { transform: translate(40vw, 20vh) scale(1.2); }
+    100% { transform: translate(10vw, 50vh) scale(0.9); }
+}
+
+@keyframes passear2 {
+    0%   { transform: translate(0, 0) scale(1); }
+    50%  { transform: translate(-35vw, -30vh) scale(1.15); }
+    100% { transform: translate(-10vw, -55vh) scale(1); }
+}
+
+@keyframes passear3 {
+    0%   { transform: translate(0, 0) scale(1); }
+    50%  { transform: translate(-30vw, 20vh) scale(1.3); }
+    100% { transform: translate(25vw, -25vh) scale(0.8); }
+}
+
+/* Notas musicais subindo */
+.nota {
+    position: absolute;
+    bottom: -60px;
+    color: rgba(255, 255, 255, 0.18);
+    font-size: 28px;
+    animation: subir linear infinite;
+}
+
+.nota:nth-child(4)  { left: 6%;  font-size: 26px; animation-duration: 16s; animation-delay: 0s; }
+.nota:nth-child(5)  { left: 18%; font-size: 38px; animation-duration: 22s; animation-delay: -6s; color: rgba(139, 92, 246, 0.35); }
+.nota:nth-child(6)  { left: 31%; font-size: 22px; animation-duration: 14s; animation-delay: -3s; }
+.nota:nth-child(7)  { left: 47%; font-size: 34px; animation-duration: 20s; animation-delay: -11s; color: rgba(236, 72, 153, 0.35); }
+.nota:nth-child(8)  { left: 62%; font-size: 24px; animation-duration: 17s; animation-delay: -8s; }
+.nota:nth-child(9)  { left: 74%; font-size: 40px; animation-duration: 24s; animation-delay: -2s; color: rgba(34, 211, 238, 0.3); }
+.nota:nth-child(10) { left: 86%; font-size: 26px; animation-duration: 15s; animation-delay: -10s; }
+.nota:nth-child(11) { left: 94%; font-size: 32px; animation-duration: 21s; animation-delay: -14s; color: rgba(139, 92, 246, 0.35); }
+
+@keyframes subir {
+    0%   { transform: translateY(0) translateX(0) rotate(0deg); opacity: 0; }
+    10%  { opacity: 1; }
+    50%  { transform: translateY(-55vh) translateX(30px) rotate(20deg); }
+    90%  { opacity: 1; }
+    100% { transform: translateY(-115vh) translateX(-20px) rotate(-15deg); opacity: 0; }
+}
+
+/* ===================================================== */
+/* ==================== CABEÇALHO ====================== */
+/* ===================================================== */
 header {
     position: sticky;
     top: 0;
@@ -65,76 +163,165 @@ header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 20px 6%;
-    background: rgba(11, 11, 20, 0.6);
-    backdrop-filter: blur(16px);
+    padding: 18px 6%;
+    background: rgba(7, 7, 15, 0.55);
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
     border-bottom: 1px solid var(--borda);
+    animation: descer 0.7s ease both;
+}
+
+@keyframes descer {
+    from { transform: translateY(-100%); opacity: 0; }
+    to   { transform: translateY(0); opacity: 1; }
 }
 
 header h1 {
+    display: flex;
+    align-items: center;
+    gap: 14px;
     font-size: 28px;
-    font-weight: 700;
-    background: var(--gradiente);
+    font-weight: 800;
+    background: linear-gradient(90deg, var(--roxo), var(--rosa), var(--ciano), var(--roxo));
+    background-size: 300% 100%;
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
+    animation: tituloBrilhando 6s linear infinite;
 }
 
-header h1::before {
-    content: "🎧 ";
-    -webkit-text-fill-color: initial;
+@keyframes tituloBrilhando {
+    from { background-position: 0% 50%; }
+    to   { background-position: 300% 50%; }
 }
 
+/* Equalizador animado */
+.equalizador {
+    display: flex;
+    align-items: flex-end;
+    gap: 3px;
+    height: 26px;
+}
+
+.equalizador i {
+    width: 4px;
+    height: 100%;
+    border-radius: 4px;
+    background: var(--gradiente);
+    transform-origin: bottom;
+    animation: pular 1s ease-in-out infinite;
+}
+
+.equalizador i:nth-child(1) { animation-delay: -0.2s; }
+.equalizador i:nth-child(2) { animation-delay: -0.6s; animation-duration: 0.8s; }
+.equalizador i:nth-child(3) { animation-delay: -0.1s; animation-duration: 1.2s; }
+.equalizador i:nth-child(4) { animation-delay: -0.8s; animation-duration: 0.9s; }
+.equalizador i:nth-child(5) { animation-delay: -0.4s; }
+
+@keyframes pular {
+    0%, 100% { transform: scaleY(0.25); }
+    50%      { transform: scaleY(1); }
+}
+
+/* Botão Cadastrar */
 header a {
     position: relative;
+    overflow: hidden;
     color: white;
     text-decoration: none;
     font-weight: 600;
-    padding: 12px 24px;
+    padding: 12px 26px;
     border-radius: 999px;
     background: var(--gradiente);
-    box-shadow: 0 8px 24px rgba(139, 92, 246, 0.35);
+    box-shadow: 0 8px 24px rgba(139, 92, 246, 0.4);
     transition: transform 0.25s, box-shadow 0.25s;
+    animation: pulsar 2.5s ease-in-out infinite;
 }
 
 header a::before {
     content: "+ ";
-    font-weight: 700;
+    font-weight: 800;
+}
+
+/* reflexo passando pelo botão */
+header a::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -75%;
+    width: 50%;
+    height: 100%;
+    background: linear-gradient(120deg, transparent, rgba(255, 255, 255, 0.45), transparent);
+    transform: skewX(-20deg);
+    animation: reflexo 3.5s ease-in-out infinite;
+}
+
+@keyframes pulsar {
+    0%, 100% { box-shadow: 0 8px 24px rgba(139, 92, 246, 0.4), 0 0 0 0 rgba(236, 72, 153, 0.5); }
+    50%      { box-shadow: 0 8px 24px rgba(139, 92, 246, 0.4), 0 0 0 10px rgba(236, 72, 153, 0); }
+}
+
+@keyframes reflexo {
+    0%, 60% { left: -75%; }
+    100%    { left: 130%; }
 }
 
 header a:hover {
-    transform: translateY(-3px) scale(1.04);
-    box-shadow: 0 12px 32px rgba(236, 72, 153, 0.5);
+    transform: translateY(-3px) scale(1.06);
 }
 
 header a:active {
-    transform: scale(0.97);
+    transform: scale(0.96);
 }
 
-/* ===== Lista ===== */
+/* ===================================================== */
+/* ====================== LISTA ======================== */
+/* ===================================================== */
 main {
-    max-width: 760px;
-    margin: 40px auto;
+    max-width: 780px;
+    margin: 44px auto;
     padding: 0 20px;
 }
 
 #listaMusicas {
     display: flex;
     flex-direction: column;
-    gap: 18px;
+    gap: 20px;
+    perspective: 1000px;
 }
 
-/* ===== Card da música ===== */
+/* ===================================================== */
+/* =================== CARD DA MÚSICA ================== */
+/* ===================================================== */
 .musica {
     position: relative;
-    padding: 24px 24px 24px 96px;
-    background: var(--vidro);
-    border: 1px solid var(--borda);
-    border-radius: 20px;
-    backdrop-filter: blur(12px);
+    padding: 26px 26px 26px 118px;
+    border-radius: 22px;
+    /* fundo de vidro + borda em gradiente que gira */
+    border: 1.5px solid transparent;
+    background:
+        linear-gradient(var(--card), var(--card)) padding-box,
+        conic-gradient(from var(--angulo), rgba(255,255,255,0.08), rgba(255,255,255,0.08), rgba(255,255,255,0.08)) border-box;
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
     overflow: hidden;
-    animation: aparecer 0.6s ease both;
-    transition: transform 0.3s, border-color 0.3s, box-shadow 0.3s;
+    animation: aparecer 0.7s cubic-bezier(.2, .8, .2, 1) both;
+    transition: transform 0.4s cubic-bezier(.2, .8, .2, 1), box-shadow 0.4s;
+}
+
+.musica:hover {
+    transform: translateY(-6px) rotateX(4deg) scale(1.015);
+    box-shadow:
+        0 20px 50px rgba(139, 92, 246, 0.25),
+        0 0 0 1px rgba(236, 72, 153, 0.15);
+    background:
+        linear-gradient(var(--card), var(--card)) padding-box,
+        conic-gradient(from var(--angulo), var(--roxo), var(--rosa), var(--ciano), var(--roxo)) border-box;
+    animation: aparecer 0.7s cubic-bezier(.2, .8, .2, 1) both, girarBorda 3s linear infinite;
+}
+
+@keyframes girarBorda {
+    to { --angulo: 360deg; }
 }
 
 /* Os cards aparecem um depois do outro */
@@ -145,77 +332,96 @@ main {
 .musica:nth-child(n+6) { animation-delay: 0.4s; }
 
 @keyframes aparecer {
-    from { opacity: 0; transform: translateY(24px); }
-    to   { opacity: 1; transform: translateY(0); }
+    from { opacity: 0; transform: translateY(30px) scale(0.97); filter: blur(6px); }
+    to   { opacity: 1; transform: translateY(0) scale(1); filter: blur(0); }
 }
 
-/* "Capa" do disco à esquerda */
+/* Disco de vinil à esquerda */
 .musica::before {
-    content: "♪";
+    content: "";
     position: absolute;
     left: 24px;
-    top: 24px;
-    width: 52px;
-    height: 52px;
-    display: grid;
-    place-items: center;
-    font-size: 24px;
-    color: white;
-    border-radius: 14px;
-    background: var(--gradiente);
-    box-shadow: 0 6px 18px rgba(139, 92, 246, 0.4);
-    transition: transform 0.4s;
+    top: 50%;
+    width: 70px;
+    height: 70px;
+    margin-top: -35px;
+    border-radius: 50%;
+    background:
+        radial-gradient(circle, #fff 0 3px, transparent 4px),
+        radial-gradient(circle, var(--rosa) 0 14px, transparent 15px),
+        repeating-radial-gradient(circle, #111 0 2px, #1e1e28 2px 4px);
+    box-shadow:
+        0 0 0 2px rgba(255, 255, 255, 0.06),
+        0 8px 22px rgba(0, 0, 0, 0.5);
+    animation: girarDisco 6s linear infinite;
+    animation-play-state: paused;
+    transition: box-shadow 0.4s;
 }
 
-/* Brilho que passa pelo card no hover */
+.musica:hover::before {
+    animation-play-state: running;
+    animation-duration: 1.6s;
+    box-shadow:
+        0 0 0 2px rgba(236, 72, 153, 0.4),
+        0 0 30px rgba(236, 72, 153, 0.45);
+}
+
+@keyframes girarDisco {
+    to { transform: rotate(360deg); }
+}
+
+/* Brilho que atravessa o card no hover */
 .musica::after {
     content: "";
     position: absolute;
     inset: 0;
-    background: linear-gradient(120deg, transparent 30%, rgba(255, 255, 255, 0.08), transparent 70%);
-    transform: translateX(-100%);
-    transition: transform 0.7s;
+    background: linear-gradient(115deg, transparent 35%, rgba(255, 255, 255, 0.09), transparent 65%);
+    transform: translateX(-120%);
+    transition: transform 0.9s;
     pointer-events: none;
 }
 
-.musica:hover {
-    transform: translateY(-4px);
-    border-color: rgba(139, 92, 246, 0.6);
-    box-shadow: 0 16px 40px rgba(139, 92, 246, 0.25);
-}
-
-.musica:hover::before {
-    transform: rotate(-8deg) scale(1.1);
-}
-
 .musica:hover::after {
-    transform: translateX(100%);
+    transform: translateX(120%);
 }
 
 .musica h2 {
-    font-size: 21px;
-    font-weight: 600;
+    font-size: 22px;
+    font-weight: 700;
     margin-bottom: 2px;
+    transition: letter-spacing 0.4s;
+}
+
+.musica:hover h2 {
+    letter-spacing: 0.3px;
 }
 
 .artista {
     color: var(--rosa);
     font-weight: 500;
-    margin-bottom: 8px;
+    margin-bottom: 10px;
 }
 
 .detalhes {
     display: inline-block;
     font-size: 13px;
     color: var(--texto-suave);
-    padding: 4px 12px;
+    padding: 4px 14px;
     border-radius: 999px;
     background: rgba(255, 255, 255, 0.05);
     border: 1px solid var(--borda);
     margin-bottom: 16px;
+    transition: color 0.3s, border-color 0.3s;
 }
 
-/* ===== Botões do card ===== */
+.musica:hover .detalhes {
+    color: var(--texto);
+    border-color: rgba(139, 92, 246, 0.5);
+}
+
+/* ===================================================== */
+/* ================= BOTÕES DO CARD ==================== */
+/* ===================================================== */
 .acoes {
     display: flex;
     gap: 10px;
@@ -223,6 +429,8 @@ main {
 
 .editar,
 .apagar {
+    position: relative;
+    z-index: 1;
     font-family: inherit;
     font-size: 14px;
     font-weight: 500;
@@ -235,24 +443,31 @@ main {
 .editar {
     color: white;
     text-decoration: none;
-    background: rgba(139, 92, 246, 0.2);
-    border: 1px solid rgba(139, 92, 246, 0.5);
+    background: rgba(139, 92, 246, 0.18);
+    border: 1px solid rgba(139, 92, 246, 0.55);
 }
 
 .editar::before {
-    content: "✎ ";
+    content: "✎";
+    display: inline-block;
+    margin-right: 6px;
+    transition: transform 0.3s;
 }
 
 .editar:hover {
     background: var(--roxo);
-    box-shadow: 0 6px 18px rgba(139, 92, 246, 0.45);
+    box-shadow: 0 6px 20px rgba(139, 92, 246, 0.55);
     transform: translateY(-2px);
+}
+
+.editar:hover::before {
+    transform: rotate(-20deg);
 }
 
 .apagar {
     color: var(--vermelho);
     background: transparent;
-    border: 1px solid rgba(244, 63, 94, 0.5);
+    border: 1px solid rgba(244, 63, 94, 0.55);
 }
 
 .apagar::before {
@@ -262,28 +477,50 @@ main {
 .apagar:hover {
     color: white;
     background: var(--vermelho);
-    box-shadow: 0 6px 18px rgba(244, 63, 94, 0.45);
-    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(244, 63, 94, 0.55);
+    animation: tremer 0.4s ease;
+}
+
+@keyframes tremer {
+    0%, 100% { transform: translateX(0); }
+    25%      { transform: translateX(-3px) rotate(-2deg); }
+    75%      { transform: translateX(3px) rotate(2deg); }
 }
 
 .editar:active,
 .apagar:active {
-    transform: scale(0.95);
+    transform: scale(0.93);
 }
 
-/* ===== Celular ===== */
+/* ===================================================== */
+/* ==================== CELULAR ======================== */
+/* ===================================================== */
 @media (max-width: 600px) {
     header {
         flex-direction: column;
         gap: 14px;
     }
 
+    header h1 {
+        font-size: 24px;
+    }
+
     .musica {
-        padding: 90px 20px 20px;
+        padding: 110px 20px 22px;
     }
 
     .musica::before {
+        top: 22px;
+        margin-top: 0;
         left: 20px;
-        top: 20px;
+    }
+}
+
+/* Para quem prefere menos movimento */
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
     }
 }
