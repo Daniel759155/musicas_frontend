@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastrar música</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="cadastrar.css">
+</head>
+<body>
+    <main>
+        <a class="voltar" href="index.html">Voltar para a lista</a>
+
+        <h1>Cadastrar música</h1>
+
+        <label for="titulo">Título</label>
+        <input type="text" id="titulo" placeholder="Ex.: Tempo Perdido">
+
+        <label for="artista">Artista</label>
+        <input type="text" id="artista" placeholder="Ex.: Legião Urbana">
+
+        <label for="genero">Gênero</label>
+        <input type="text" id="genero" placeholder="Ex.: Rock">
+
+        <div class="linha">
+            <div class="campo">
+                <label for="ano">Ano</label>
+                <input type="number" id="ano" placeholder="1986">
+            </div>
+            <div class="campo">
+                <label for="duracao">Duração em minutos</label>
+                <input type="number" id="duracao" placeholder="5">
+            </div>
+        </div>
+
+        <button id="botaoCadastrar">Cadastrar</button>
+    </main>
+
+    <script src="cadastrar.js"></script>
+</body>
+</html>
